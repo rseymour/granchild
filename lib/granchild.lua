@@ -60,7 +60,7 @@ function Granchild:new(args)
   m.voices={}
   for i=1,m.num_voices do
     m.voices[i]={
-      division=8,-- 8 = quartner notes
+      division=8,-- 8 = quarter notes
       is_playing=false,
       is_recording=false,
       steps={},
@@ -234,6 +234,8 @@ function Granchild:key_press(row,col,on)
     self:change_position(row,col)
   elseif col%4==2 and (row==7 or row==8) and on then
     self:change_pitch_mod(row,col)
+  elseif col%4==2 and (row==7 and row==8) and on then
+    self:reset_pitch(col)
   elseif (col%4==0) and row==7 and on then
     self:change_scene(col)
   elseif col%4==1 and (row==1 or row==2) and on then
@@ -338,6 +340,14 @@ function Granchild:change_volume(row,col)
   local diff=-1*((row-7)*2-1)
   params:delta(voice.."volume"..params:get(voice.."scene"),diff)
   print("change_volume "..voice.." "..diff.." "..params:get(voice.."volume"..params:get(voice.."scene")))
+end
+
+function Granchild:reset_pitch(col)
+  local voice=math.floor((col-1)/4)+1
+  self.voices[voice].pitch_mod_i=5
+  print(self.voices[voice].pitch_mod_i)
+  params:set(voice.."pitch"..params:get(voice.."scene"),pitch_mods[self.voices[voice].pitch_mod_i])
+  print("reset_pitch "..voice.." "..diff.." "..params:get(voice.."pitch"..params:get(voice.."scene")))
 end
 
 function Granchild:change_pitch_mod(row,col)
