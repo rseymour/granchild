@@ -242,6 +242,8 @@ function Granchild:key_press(row,col,on)
     self:change_density_mod(row,col)
   elseif col%4==1 and (row==3 or row==4) and on then
     self:change_size(row,col)
+  elseif col%4==1 and (row==5 and row==6) and on then
+    self:reset_speed(col)
   elseif col%4==1 and (row==5 or row==6) and on then
     self:change_speed(row,col)
   elseif col%4==1 and (row==7 or row==8) and on then
@@ -326,6 +328,13 @@ function Granchild:change_size(row,col)
   local diff=-1*((row-3)*2-1)
   params:delta(voice.."size"..params:get(voice.."scene"),diff)
   print("change_size "..voice.." "..diff.." "..params:get(voice.."size"..params:get(voice.."scene")))
+end
+
+function Granchild:reset_speed(col)
+  local voice=math.floor((col-1)/4)+1
+  local diff=0
+  params:delta(voice.."speed"..params:get(voice.."scene"),diff)
+  print("change_speed "..voice.." "..diff.." "..params:get(voice.."speed"..params:get(voice.."scene")))
 end
 
 function Granchild:change_speed(row,col)
